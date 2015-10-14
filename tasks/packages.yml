@@ -1,8 +1,26 @@
 ---
 # Install required packages
 
-- name: install required packages
-  apt: pkg={{ item }} state=present
-  with_items:
-    - rabbitmq-server
+- name: install rabbitmq-server packages via apt
+  apt:
+    pkg: rabbitmq-server
+      {%- if rabbitmq_version != '' -%}
+      ={{ rabbitmq_version }}-1
+      {%- endif %}
+    state: present
+    force: yes
+  register: rabbitmq_version_in_repo
+  ignore_errors: yes
 
+- name: download rabbitmq-server deb from rabbitmq.com
+  get_url:
+    url: https://www.rabbitmq.com/releases/rabbitmq-server/v{{ rabbitmq_version }}/rabbitmq-server_{{ rabbitmq_version }}-1_all.deb
+    dest: /var/cache/apt/archives/rabbitmq-server_{{ rabbitmq_version }}-1_all.deb
+  when: rabbitmq_version_in_repo|failed
+
+- name: install rabbitmq-server deb from rabbitmq.com
+  apt:
+    deb: /var/cache/apt/archives/rabbitmq-server_{{ rabbitmq_version }}-1_all.deb
+    state: present
+    force: yes
+  when: rabbitmq_version_in_repo|failed

@@ -49,6 +49,12 @@ them are as follows.
 	rabbitmq_users_removed:
 	  - guest
 
+        # Version of rabbitmq-server package to install
+	# If it can't find a specified version in your apt repos,
+	# attempt to download the deb from https://www.rabbitmq.com/releases/rabbitmq-server/ 
+	rabbitmq_version: ''        # installs latest available in your repo
+	rabbitmq_version: '3.1.5'   # installs rabbitmq-server_3.1.5-1_all.deb
+
 Examples
 --------
 
