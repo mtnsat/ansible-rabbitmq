@@ -1,17 +1,17 @@
 ---
 # RabbitMQ user and vhost management
 
-- name: Ensure the users is removed
+- name: Ensure users are removed
   rabbitmq_user: user="{{ item }}" state=absent
   with_items: rabbitmq_users_removed
   tags: [configuration,rabbitmq]
 
-- name: Ensure the vhosts is present
+- name: Ensure vhosts are present
   rabbitmq_vhost: name="{{ item }}"
   with_items: rabbitmq_vhosts
   tags: [configuration,rabbitmq]
 
-- name: Ensure the users is present
+- name: Ensure users are present
   rabbitmq_user:
     user: "{{ item.user }}"
     password: "{{ item.password }}"
@@ -20,6 +20,7 @@
     write_priv: "{{ item.write_priv|default('.*') }}"
     vhost: "{{ item.vhost|default('/') }}"
     tags: "{{ item.tags|default('') }}"
+  no_log: true  # mask passwords
   with_items: rabbitmq_users
   tags: [configuration,rabbitmq]
 
@@ -27,8 +28,8 @@
   file: state=link src=/usr/lib/rabbitmq/bin dest=/usr/lib/rabbitmq/sbin
   tags: [configuration,rabbitmq]
 
-- name: Enable the plugins is installed
-  rabbitmq_plugin: names="{{ item }}" state=enabled prefix=/usr/lib/rabbitmq
+- name: Enable plugins are installed
+  rabbitmq_plugin: names="{{ item }}" state=enabled prefix=/usr/lib/rabbitmq new_only=yes
   with_items: rabbitmq_plugins
   notify: restart rabbitmq-server
   tags: [configuration,rabbitmq]
