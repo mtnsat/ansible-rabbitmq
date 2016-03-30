@@ -34,6 +34,11 @@
   notify: restart rabbitmq-server
   tags: [configuration,rabbitmq]
 
+- name: restart rabbitmq-server
+  service:
+    name: rabbitmq-server
+    state: restarted
+    
 - name: setup rabbitmq exchange
   rabbitmq_exchange:
     name: "{{ item.exchange_name }}"
