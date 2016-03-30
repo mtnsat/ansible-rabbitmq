@@ -48,6 +48,7 @@
     vhost: "/{{ item.exchange_name }}"
     login_user: "{{ item.exchange_name }}"
     login_password: "{{ item.password }}"
+  no_log: true  # mask passwords
   with_items: "{{ rabbitmq_exchanges }}"
 
 - name: setup rabbitmq queue
@@ -57,6 +58,7 @@
     login_user: "{{ item.queue_name}}"
     login_password: "{{item.password}}"
     vhost: "/{{ item.queue_name}}"
+  no_log: true  # mask passwords
   with_items: "{{ rabbitmq_queue }}"
 
 - name: setup rabbitmq binding
@@ -68,4 +70,5 @@
     routing_key: "{{ item.routing_key }}"
     login_user: "{{ item.user }}"
     login_password: "{{ item.password }}"
+  no_log: true  # mask passwords
   with_items: "{{ rabbitmq_bindings }}"
