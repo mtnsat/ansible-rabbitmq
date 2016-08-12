@@ -44,32 +44,34 @@
 - name: setup rabbitmq exchange
   rabbitmq_exchange:
     name: "{{ item.exchange_name }}"
-    type: "{{ item.exchange_type|default('direct') }}"
+    exchange_type: "{{ item.exchange_type|default('direct') }}"
     durable: "{{ item.durable|default('yes') }}"
     vhost: "/{{ item.vhost_name }}"
     login_user: "{{ item.user }}"
     login_password: "{{ item.password }}"
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_exchanges }}"
+  # ignore_errors: yes
 
 - name: setup rabbitmq queue
   rabbitmq_queue:
     name: "{{ item.queue_name}}"
-    durable: true
     login_user: "{{ item.user}}"
     login_password: "{{item.password}}"
     vhost: "/{{ item.vhost_name}}"
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_queue }}"
+  # ignore_errors: yes
 
 - name: setup rabbitmq binding
   rabbitmq_binding:
     vhost: "/{{ item.vhost_name }}"
     source: "{{ item.binding_source }}"
-    type: "{{ item.binding_type }}"
     destination: "{{ item.binding_destination }}"
+    destination_type: "{{ item.binding_type }}"
     routing_key: "{{ item.routing_key }}"
     login_user: "{{ item.user }}"
     login_password: "{{ item.password }}"
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_bindings }}"
+  # ignore_errors: yes
