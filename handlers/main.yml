@@ -12,4 +12,3 @@
 - name: stop rabbitmq-server
   service: name=rabbitmq-server state=stopped
   tags: rabbitmq
-
