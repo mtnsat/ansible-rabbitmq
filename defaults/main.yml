@@ -1,5 +1,4 @@
 ---
-
 rabbitmq_use_upstream_repository: true
 rabbitmq_erlang_cookie: 1qa2ws3ed
 rabbitmq_ulimit_open_files: 1024
@@ -22,4 +21,3 @@ rabbitmq_users:
 
 rabbitmq_users_removed:
   - guest
-
