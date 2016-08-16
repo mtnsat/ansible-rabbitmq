@@ -1,5 +1,23 @@
 ---
 # Install required packages
+- block:
+  ## WORKAROUND: python-requests that comes with ubuntu 12.04 is too
+  ## old to run ansible rabbitmq setup
+  - name: upgrade pip
+    pip:
+      name: pip
+      state: latest
+  - name: install python requests
+    pip:
+      name: requests
+  when:
+    (
+    is_testkitchen is defined and is_testkitchen
+    and
+    ansible_distribution == 'Ubuntu'
+    and
+    ansible_distribution_major_version == '12'
+    )
 
 - name: install rabbitmq-server packages via apt
   apt:
