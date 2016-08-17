@@ -51,6 +51,9 @@
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_exchanges }}"
   tags: [configuration,rabbitmq]
+  ## WORKAROUND: zi_shore nodes usually don't have port 15672
+  ## accessible from ansible host
+  ignore_errors: yes
 
 - name: setup rabbitmq queue
   rabbitmq_queue:
@@ -61,6 +64,9 @@
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_queue }}"
   tags: [configuration,rabbitmq]
+  ## WORKAROUND: zi_shore nodes usually don't have port 15672
+  ## accessible from ansible host
+  ignore_errors: yes
 
 - name: setup rabbitmq binding
   rabbitmq_binding:
@@ -74,3 +80,6 @@
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_bindings }}"
   tags: [configuration,rabbitmq]
+  ## WORKAROUND: zi_shore nodes usually don't have port 15672
+  ## accessible from ansible host
+  ignore_errors: yes
