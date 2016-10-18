@@ -45,6 +45,7 @@
     login_password: "{{ item.password }}"
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_exchanges }}"
+  ignore_errors: yes
 
 - name: Setup rabbitmq queue
   rabbitmq_queue:
@@ -54,6 +55,7 @@
     vhost: "/{{ item.vhost_name}}"
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_queue }}"
+  ignore_errors: yes
 
 - name: Setup rabbitmq binding
   rabbitmq_binding:
@@ -66,3 +68,4 @@
     login_password: "{{ item.password }}"
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_bindings }}"
+  ignore_errors: yes
