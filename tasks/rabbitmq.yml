@@ -4,12 +4,10 @@
 - name: Ensure users are removed
   rabbitmq_user: user="{{ item }}" state=absent
   with_items: "{{ rabbitmq_users_removed }}"
-  tags: [configuration,rabbitmq]
 
 - name: Ensure vhosts are present
   rabbitmq_vhost: name="{{ item }}"
   with_items: "{{ rabbitmq_vhosts }}"
-  tags: [configuration,rabbitmq]
 
 - name: Ensure users are present
   rabbitmq_user:
@@ -22,25 +20,22 @@
     tags: "{{ item.tags|default('') }}"
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_users }}"
-  tags: [configuration,rabbitmq]
 
 - name: Symlink RabbitMQ bin to sbin
   file: state=link src=/usr/lib/rabbitmq/bin dest=/usr/lib/rabbitmq/sbin
-  tags: [configuration,rabbitmq]
   register: symlink_changes
 
 - name: Enable plugins are installed
   rabbitmq_plugin: names="{{ item }}" state=enabled prefix=/usr/lib/rabbitmq new_only=yes
   with_items: "{{ rabbitmq_plugins }}"
   notify: restart rabbitmq-server
-  tags: [configuration,rabbitmq]
 
 ## rabbitmq may need a restart to enable management plugin
 - meta: flush_handlers
 - wait_for:
     port: 15672
 
-- name: setup rabbitmq exchange
+- name: Setup rabbitmq exchange
   rabbitmq_exchange:
     name: "{{ item.exchange_name }}"
     exchange_type: "{{ item.exchange_type|default('direct') }}"
@@ -50,9 +45,9 @@
     login_password: "{{ item.password }}"
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_exchanges }}"
-  tags: [configuration,rabbitmq]
+  ignore_errors: yes
 
-- name: setup rabbitmq queue
+- name: Setup rabbitmq queue
   rabbitmq_queue:
     name: "{{ item.queue_name}}"
     login_user: "{{ item.user}}"
@@ -60,9 +55,9 @@
     vhost: "/{{ item.vhost_name}}"
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_queue }}"
-  tags: [configuration,rabbitmq]
+  ignore_errors: yes
 
-- name: setup rabbitmq binding
+- name: Setup rabbitmq binding
   rabbitmq_binding:
     vhost: "/{{ item.vhost_name }}"
     source: "{{ item.binding_source }}"
@@ -73,4 +68,4 @@
     login_password: "{{ item.password }}"
   no_log: true  # mask passwords
   with_items: "{{ rabbitmq_bindings }}"
-  tags: [configuration,rabbitmq]
+  ignore_errors: yes

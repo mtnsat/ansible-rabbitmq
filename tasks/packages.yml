@@ -12,8 +12,6 @@
       name: requests
   when:
     (
-    is_testkitchen is defined and is_testkitchen
-    and
     ansible_distribution == 'Ubuntu'
     and
     ansible_distribution_major_version == '12'
