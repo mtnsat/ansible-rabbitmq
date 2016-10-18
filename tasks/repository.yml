@@ -1,8 +1,9 @@
 ---
 # Setup installation repositories
-
 - name: import repository key
-  apt_key: url=http://www.rabbitmq.com/rabbitmq-signing-key-public.asc state=present
+  apt_key:
+    url: http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+    state: present
 
 - name: add apt repository
   apt_repository:
